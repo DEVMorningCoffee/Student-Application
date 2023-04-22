@@ -21,7 +21,8 @@ app.use(flash());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Home Page");
+  const msg = req.flash("msg");
+  res.send(msg);
 });
 
 app.use("/", require("./routes/loginPage"));
