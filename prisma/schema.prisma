@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id          String       @id @default(uuid())
+  name        String
+  internships Internship[]
+  Submission  Submission[]
+}
+
+model Internship {
+  id            String          @id @default(uuid())
+  title         String
+  startDate     DateTime
+  endDate       DateTime
+  company       Company         @relation(fields: [companyId], references: [id])
+  companyId     String
+  submissions   Submission[]
+  Student       Student?        @relation(fields: [studentId], references: [id])
+  studentId     String?
+  InternshipTag InternshipTag[]
+}
+
+model Company {
+  id          String       @id @default(uuid())
+  name        String
+  internships Internship[]
+}
+
+model Tag {
+  id            String          @id @default(uuid())
+  name          String          @unique
+  InternshipTag InternshipTag[]
+
+  @@index([name])
+}
+
+model InternshipTag {
+  intership    Internship @relation(fields: [internshipId], references: [id])
+  internshipId String
+  tag          Tag        @relation(fields: [tagId], references: [id])
+  tagId        String
+
+  @@id([internshipId, tagId])
+}
+
+model Submission {
+  id            String     @id @default(uuid())
+  student       Student    @relation(fields: [studentId], references: [id])
+  studentId     String
+  internship    Internship @relation(fields: [internshipId], references: [id])
+  internshipId  String
+  dateSubmitted DateTime
+  description   String?
+}
