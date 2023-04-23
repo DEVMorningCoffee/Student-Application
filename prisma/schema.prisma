@@ -12,19 +12,17 @@ datasource db {
 
 model Student {
   id          String       @id @default(uuid())
-  name        String
+  name        String       @unique
   internships Internship[]
-  Submission  Submission[]
 }
 
 model Internship {
   id            String          @id @default(uuid())
-  title         String
   startDate     DateTime
   endDate       DateTime
   company       Company         @relation(fields: [companyId], references: [id])
   companyId     String
-  submissions   Submission[]
+  description   String?
   Student       Student?        @relation(fields: [studentId], references: [id])
   studentId     String?
   InternshipTag InternshipTag[]
@@ -32,7 +30,7 @@ model Internship {
 
 model Company {
   id          String       @id @default(uuid())
-  name        String
+  name        String       @unique
   internships Internship[]
 }
 
@@ -45,20 +43,10 @@ model Tag {
 }
 
 model InternshipTag {
-  intership    Internship @relation(fields: [internshipId], references: [id])
+  internship   Internship @relation(fields: [internshipId], references: [id])
   internshipId String
   tag          Tag        @relation(fields: [tagId], references: [id])
   tagId        String
 
   @@id([internshipId, tagId])
-}
-
-model Submission {
-  id            String     @id @default(uuid())
-  student       Student    @relation(fields: [studentId], references: [id])
-  studentId     String
-  internship    Internship @relation(fields: [internshipId], references: [id])
-  internshipId  String
-  dateSubmitted DateTime
-  description   String?
 }
