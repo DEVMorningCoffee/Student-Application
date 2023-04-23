@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { generateAcessToken } = require("../src/token/jwt");
+const { Company, Student } = require("../src/db/queries");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -21,17 +22,8 @@ router.post("/login", async (req, res) => {
       throw new Error("Please enter a name");
     }
 
-    // Prisma
-    let user = await prisma.student.findFirst({
-      where: { name },
-    });
-
-    if (!user) {
-      user = await prisma.student.create({
-        data: { name },
-      });
-    }
-
+    const student = new Student();
+    student.insert(name);
     // JWT
     const token = generateAcessToken(name);
 
@@ -55,7 +47,9 @@ router.get("/survey", (req, res) => {
 
 router.post("/survey", (req, res) => {
   try {
-    const { duty, company, tags } = req.body;
+    const { duty, company: name, tags } = req.body;
+    const company = new Company();
+    company.insert(name);
     res.json(req.body);
   } catch (err) {
     res.json(err);
