@@ -5,6 +5,8 @@ html(lang="en")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet", href="/css/survey.css")
+        link(rel='shortcut icon' type='image/x-icon' href='/favicon.ico')
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
         title Survey
     body 
 
@@ -12,13 +14,14 @@ html(lang="en")
             h1#title.text-center Student Internship Application
             p#decription.text-center.decription Please fill out the form to help others &#x1F60A;
         form(id='survey=-form', method="post", action="/survey")
+            fieldset 
                 p.pform Please include your description of duty?
                 textarea#comments.input-textarea(name='duty' placeholder='Your answer', required)
                 fieldset
                     div
                         label(for="company-list") Which company?
                         .sgroup
-                            input(id="company-list" list="company-data" type="search", required, name="company", placeholder="Company")
+                            input(id="company-list" list="company-data" type="search", required, name="company", placeholder="Company" autocomplete="off")
                         datalist(id="company-data")
                             option(value="Facebook") 
                             option(value="Google") 
@@ -29,17 +32,24 @@ html(lang="en")
                     section.tags
                         p Input tags here (seperate with comma)
                         .tags__container
-                        input#search(type='text', list="tags-data", placeholder="Tags") 
+                        input#search(type='text', list="tags-data", placeholder="Tags" autocomplete="off") 
                         datalist(id="tags-data")
                             option(value="HTML") 
                             option(value="CSS") 
                             option(value="Javscript") 
                             option(value="C++") 
                             option(value="Remote")
+                fieldset.calendar
+                    .form-container
+                        div.form-container_calendar
+                            input.start_date_input.date_input(type='text' placeholder='Pick a date' name="startDate" required) 
+                    .form-container
+                        div.form-container_calendar
+                            input.end_date_input.date_input(type='text' placeholder='Pick a date' name="endDate" required) 
                 fieldset
                 button#submit.submit-button(type='submit') Submit
 
         footer
             label Made By Jeffrey A.
 
-        script(src='/js/survey.js', type='text/javascript' defer)
+        script(src='/js/survey.js', type='text/javascript' async)
