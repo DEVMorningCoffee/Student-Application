@@ -4,8 +4,10 @@ const { generateAcessToken } = require("../src/token/jwt");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+/* Login Page */
+
 router.get("/login", (req, res) => {
-  res.render("loginPage.pug", {
+  res.render("login.pug", {
     message: req.flash("msg"),
   });
 });
@@ -44,3 +46,18 @@ router.post("/login", async (req, res) => {
 });
 
 module.exports = router;
+
+/* Survey Page */
+
+router.get("/survey", (req, res) => {
+  res.render("survey.pug");
+});
+
+router.post("/survey", (req, res) => {
+  try {
+    const { duty, company, tags } = req.body;
+    res.json(req.body);
+  } catch (err) {
+    res.json(err);
+  }
+});

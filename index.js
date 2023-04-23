@@ -29,7 +29,8 @@ app.get("/", (req, res) => {
   res.send(msg);
 });
 
-app.use("/", require("./routes/loginPage"));
+app.use("/", require("./routes/router"));
+app;
 
 app.listen(PORT, () => {
   console.log(`You are listening on port: ${PORT}`);

@@ -1,0 +1,45 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", href="/css/survey.css")
+        title Survey
+    body 
+
+        header
+            h1#title.text-center Student Internship Application
+            p#decription.text-center.decription Please fill out the form to help others &#x1F60A;
+        form(id='survey=-form', method="post", action="/survey")
+                p.pform Please include your description of duty?
+                textarea#comments.input-textarea(name='duty' placeholder='Your answer', required)
+                fieldset
+                    div
+                        label(for="company-list") Which company?
+                        .sgroup
+                            input(id="company-list" list="company-data" type="search", required, name="company", placeholder="Company")
+                        datalist(id="company-data")
+                            option(value="Facebook") 
+                            option(value="Google") 
+                            option(value="Microsoft") 
+                            option(value="Intel") 
+                            option(value="Samsung")
+                fieldset 
+                    section.tags
+                        p Input tags here (seperate with comma)
+                        .tags__container
+                        input#search(type='text', list="tags-data", placeholder="Tags") 
+                        datalist(id="tags-data")
+                            option(value="HTML") 
+                            option(value="CSS") 
+                            option(value="Javscript") 
+                            option(value="C++") 
+                            option(value="Remote")
+                fieldset
+                button#submit.submit-button(type='submit') Submit
+
+        footer
+            label Made By Jeffrey A.
+
+        script(src='/js/survey.js', type='text/javascript' defer)
