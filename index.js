@@ -20,6 +20,10 @@ app.use(
 app.use(flash());
 app.use(cors());
 
+// Setup Pug
+app.set("view engine", "pug");
+app.use(express.static("public"));
+
 app.get("/", (req, res) => {
   const msg = req.flash("msg");
   res.send(msg);

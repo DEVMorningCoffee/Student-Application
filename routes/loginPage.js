@@ -5,7 +5,9 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 router.get("/login", (req, res) => {
-  res.json(req.flash("msg"));
+  res.render("loginPage.pug", {
+    message: req.flash("msg"),
+  });
 });
 
 router.post("/login", async (req, res) => {

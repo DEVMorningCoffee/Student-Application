@@ -1,0 +1,21 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", href="/css/loginPage.css")
+        title Login
+    body 
+
+        if (message.length > 0)
+            .error #{message}
+        form(action='/login', method='post')
+            .group
+                input(type='text', placeholder='Name', name='name')
+                span.highlight
+                span.bar
+            button.button.buttonBlue(type='submit')
+                | Enter
+                .ripples.buttonRipples
+                span.ripplesCircle
