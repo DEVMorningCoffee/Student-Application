@@ -113,6 +113,16 @@ router.post("/filter/company", async (req, res) => {
   }
 });
 
+class DateFormat {
+  formatToISO(date) {
+    return moment(date).toISOString();
+  }
+
+  formatToDateTime(date) {
+    return moment(date).utc().format("YYYY-MM-DD");
+  }
+}
+
 router.get("/survey/edit", async (req, res) => {
   try {
     const { id } = req.query;
@@ -120,10 +130,26 @@ router.get("/survey/edit", async (req, res) => {
     const internship = new Internship();
     const results = await internship.findById(id);
     const [a] = await formatResults([results]);
+    a.id = id;
 
     res.render("surveyEdit.pug", { a });
   } catch (err) {
     req.flash("msg", err.message);
     res.redirect("/login");
   }
+});
+
+router.post("/survey/edit", async (req, res) => {
+  const formResult = req.body;
+
+  const date = new DateFormat();
+  const company = new Company();
+  const { id: companyId } = await company.insert(formResult.company);
+  formResult.company = companyId;
+  formResult.startDate = date.formatToISO(formResult.startDate);
+  formResult.endDate = date.formatToISO(formResult.endDate);
+
+  const internship = new Internship();
+  const result = await internship.updateInternship(formResult);
+  res.json({ result });
 });

@@ -282,3 +282,7 @@ input {
 .form-container .calendar-popup table .day:hover {
   cursor: pointer;
 }
+
+.hide_id{
+  display: none;
+}

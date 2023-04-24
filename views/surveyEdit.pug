@@ -13,11 +13,12 @@ html(lang="en")
         header
             h1#title.text-center Student Internship Application
             p#decription.text-center.decription Please fill out the form to help others &#x1F60A;
-        form(id='survey=-form', method="post", action="/survey")
+        form(id='survey=-form', method="post", action="/survey/edit")
+            input.hide_id(type="text", name="id")&attributes({"value": a.id})
             fieldset 
                 p.pform Please include your description of duty?
-                textarea#comments.input-textarea(name='duty' placeholder='Your answer', required) 
-                    #{a.description}
+                textarea#comments.input-textarea(name='description' placeholder='Your answer', required 
+                    autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true") #{a.description}
                 fieldset
                     div 
                         label(for="company-list") Which company?
@@ -53,4 +54,5 @@ html(lang="en")
         footer
             label Made By Jeffrey A.
 
-//- - document.querySelector("#comments").innerHTML = #{a.description};
+        script(src='/js/survey.js', type='text/javascript' async)
+

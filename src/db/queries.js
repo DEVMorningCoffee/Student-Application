@@ -55,6 +55,18 @@ class Internship {
       where: { startDate },
     });
   }
+
+  async updateInternship({ id, description, company, startDate, endDate }) {
+    return await prisma.internship.update({
+      where: { id },
+      data: {
+        description,
+        companyId: company,
+        startDate,
+        endDate,
+      },
+    });
+  }
 }
 
 class Student {

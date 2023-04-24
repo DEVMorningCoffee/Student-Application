@@ -57,8 +57,8 @@ app.get("/", async (req, res) => {
         results[i].companyId
       );
 
-      const startDate = moment(results[i].startDate).utc().format("DD-MM-YYYY");
-      const endDate = moment(results[i].endDate).utc().format("DD-MM-YYYY");
+      const startDate = moment(results[i].startDate).utc().format("YYYY-MM-DD");
+      const endDate = moment(results[i].endDate).utc().format("YYYY-MM-DD");
       const description = results[i].description;
       const internshipId = results[i].id;
       newResults[i] = {
@@ -70,7 +70,6 @@ app.get("/", async (req, res) => {
         internshipId,
       };
     }
-    console.log(newResults);
 
     res.render("home.pug", { newResults });
   } catch (error) {
@@ -80,7 +79,6 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/", require("./routes/router"));
-app;
 
 app.listen(PORT, () => {
   console.log(`You are listening on port: ${PORT}`);
