@@ -7,4 +7,7 @@ function generateAcessToken(name) {
   });
 }
 
-module.exports = { generateAcessToken };
+const decodeAccessToken = (token) =>
+  jwt.verify(token, process.env.ACCESS_TOKEN);
+
+module.exports = { generateAcessToken, decodeAccessToken };
