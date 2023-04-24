@@ -13,6 +13,12 @@ class Internship {
       },
     });
   }
+
+  async findSurvey(studId) {
+    return await prisma.internship.findMany({
+      where: { studentId: studId },
+    });
+  }
 }
 
 class Student {
@@ -27,6 +33,12 @@ class Student {
 
     return user;
   }
+
+  async find(name) {
+    return await prisma.student.findFirst({
+      where: { name },
+    });
+  }
 }
 
 class Company {
@@ -39,6 +51,11 @@ class Company {
       },
     });
     return company;
+  }
+  async findCompany(id) {
+    return await prisma.company.findUnique({
+      where: { id },
+    });
   }
 }
 
@@ -54,11 +71,10 @@ class Tag {
     return tag;
   }
 
-  async find(name) {
-    let tag = await prisma.tag.findFirst({
-      where: { name },
+  async findTags(id) {
+    return await prisma.tag.findUnique({
+      where: { id },
     });
-    return tag;
   }
 }
 
@@ -78,6 +94,12 @@ class InternshipTag {
       },
     });
     return internTag;
+  }
+
+  async find(internId) {
+    return await prisma.internshipTag.findMany({
+      where: { internshipId: internId },
+    });
   }
 }
 

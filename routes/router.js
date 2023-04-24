@@ -28,6 +28,10 @@ router.post("/login", async (req, res) => {
     if (!name) {
       throw new Error("Please enter a name");
     }
+
+    const student = new Student();
+    student.insert(name);
+
     // JWT
     const token = generateAcessToken(name);
 
