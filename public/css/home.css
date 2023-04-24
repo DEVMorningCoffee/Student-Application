@@ -35,12 +35,14 @@ body, html {
 .front h1,
 .back h1 {
     position: absolute;
-    top: 30%;
-    left: 28%;
+    top: 50%; 
+    left: 50%; 
+
+    transform: translate(-50%, -50%)
 }
 
 .flip h1 {
-    color: #fff5ee;
+    color: #00f8a5;
 }
 
 .flip>.front,

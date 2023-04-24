@@ -38,13 +38,13 @@ class Internship {
     });
   }
 
-  async findSurvey(studId) {
+  async findByStudentId(studId) {
     return await prisma.internship.findMany({
       where: { studentId: studId },
     });
   }
 
-  async findCompanySurvey(compId) {
+  async findByCompanyId(compId) {
     return await prisma.internship.findMany({
       where: { companyId: compId },
     });

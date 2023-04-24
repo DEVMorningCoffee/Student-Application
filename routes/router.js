@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { generateAcessToken, decodeAccessToken } = require("../src/token/jwt");
+const { DateFormat } = require("../src/format/date");
 const moment = require("moment");
 const {
   Company,
@@ -13,8 +14,13 @@ const {
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-/* Login Page */
+const company = new Company();
+const student = new Student();
+const tag = new Tag();
+const internship = new Internship();
+const date = new DateFormat();
 
+/* Login Page */
 router.get("/login", (req, res) => {
   res.render("login.pug", {
     message: req.flash("msg"),
@@ -30,7 +36,6 @@ router.post("/login", async (req, res) => {
       throw new Error("Please enter a name");
     }
 
-    const student = new Student();
     student.insert(name);
 
     // JWT
@@ -46,8 +51,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-module.exports = router;
-
 /* Survey Page */
 
 router.get("/survey", (req, res) => {
@@ -56,8 +59,13 @@ router.get("/survey", (req, res) => {
 
 router.post("/survey", async (req, res) => {
   try {
-    const { duty, company: compName, tags, startDate, endDate } = req.body;
-    const newTagsArr = [...tags];
+    const {
+      description,
+      company: compName,
+      tags,
+      startDate,
+      endDate,
+    } = req.body;
 
     const { token } = req.cookies;
 
@@ -65,28 +73,17 @@ router.post("/survey", async (req, res) => {
 
     const { name: stuName } = decodeAccessToken(token);
 
-    const student = new Student();
     const { id: stuId } = await student.insert(stuName);
 
-    const company = new Company();
     const { id: compId } = await company.insert(compName);
 
-    const internship = new Internship();
-    const { id: internId } = await internship.insert(
-      moment(startDate).toISOString(),
-      moment(endDate).toISOString(),
-      duty,
+    await internship.insert(
+      date.formatToISO(startDate),
+      date.formatToISO(endDate),
+      description,
       stuId,
       compId
     );
-
-    const tag = new Tag();
-    const internshipTag = new InternshipTag();
-
-    for (const val of newTagsArr) {
-      const { id: tagId } = await tag.insert(val);
-      await internshipTag.insert(internId, tagId);
-    }
 
     res.redirect("/");
   } catch (err) {
@@ -99,35 +96,22 @@ router.post("/filter/company", async (req, res) => {
   try {
     let filterName = req.body.name;
 
-    const company = new Company();
     const { id } = await company.findCompanyByName(filterName);
-    const internship = new Internship();
-    const results = await internship.findCompanySurvey(id);
+    const results = await internship.findByCompanyId(id);
 
     const newResults = await formatResults(results);
 
     res.render("filter.pug", { newResults });
   } catch (err) {
-    req.flash("msg", err.message);
-    res.redirect("/login");
+    req.flash("msg", "Company don't exist");
+    res.redirect("/");
   }
 });
-
-class DateFormat {
-  formatToISO(date) {
-    return moment(date).toISOString();
-  }
-
-  formatToDateTime(date) {
-    return moment(date).utc().format("YYYY-MM-DD");
-  }
-}
 
 router.get("/survey/edit", async (req, res) => {
   try {
     const { id } = req.query;
 
-    const internship = new Internship();
     const results = await internship.findById(id);
     const [a] = await formatResults([results]);
     a.id = id;
@@ -142,14 +126,13 @@ router.get("/survey/edit", async (req, res) => {
 router.post("/survey/edit", async (req, res) => {
   const formResult = req.body;
 
-  const date = new DateFormat();
-  const company = new Company();
   const { id: companyId } = await company.insert(formResult.company);
   formResult.company = companyId;
   formResult.startDate = date.formatToISO(formResult.startDate);
   formResult.endDate = date.formatToISO(formResult.endDate);
 
-  const internship = new Internship();
   const result = await internship.updateInternship(formResult);
-  res.json({ result });
+  res.redirect("/");
 });
+
+module.exports = router;

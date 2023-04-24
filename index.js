@@ -4,6 +4,7 @@ const session = require("express-session");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { decodeAccessToken } = require("./src/token/jwt");
+const { DateFormat } = require("./src/format/date");
 const moment = require("moment");
 const {
   Company,
@@ -43,11 +44,13 @@ app.get("/", async (req, res) => {
 
     const { name: stuName } = decodeAccessToken(token);
 
+    const date = new DateFormat();
+
     const student = new Student();
     const { id: stuId } = await student.find(stuName);
 
     const internship = new Internship();
-    let results = await internship.findSurvey(stuId);
+    let results = await internship.findByStudentId(stuId);
 
     const company = new Company();
 
@@ -57,8 +60,8 @@ app.get("/", async (req, res) => {
         results[i].companyId
       );
 
-      const startDate = moment(results[i].startDate).utc().format("YYYY-MM-DD");
-      const endDate = moment(results[i].endDate).utc().format("YYYY-MM-DD");
+      const startDate = date.formatToDateTime(results[i].startDate);
+      const endDate = date.formatToDateTime(results[i].endDate);
       const description = results[i].description;
       const internshipId = results[i].id;
       newResults[i] = {
