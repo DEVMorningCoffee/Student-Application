@@ -2,6 +2,7 @@ const express = require("express");
 const flash = require("connect-flash");
 const session = require("express-session");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(
 );
 app.use(flash());
 app.use(cors());
+app.use(cookieParser());
 
 // Setup Pug
 app.set("view engine", "pug");

@@ -23,7 +23,7 @@ model Internship {
   company       Company         @relation(fields: [companyId], references: [id])
   companyId     String
   description   String?
-  Student       Student?        @relation(fields: [studentId], references: [id])
+  student       Student?        @relation(fields: [studentId], references: [id])
   studentId     String?
   InternshipTag InternshipTag[]
 }

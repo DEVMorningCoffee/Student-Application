@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { generateAcessToken } = require("../src/token/jwt");
-const { Company, Student } = require("../src/db/queries");
+const { generateAcessToken, decodeAccessToken } = require("../src/token/jwt");
+const moment = require("moment");
+const { Company, Student, Tag, Internship } = require("../src/db/queries");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -21,9 +22,6 @@ router.post("/login", async (req, res) => {
     if (!name) {
       throw new Error("Please enter a name");
     }
-
-    const student = new Student();
-    student.insert(name);
     // JWT
     const token = generateAcessToken(name);
 
@@ -45,12 +43,34 @@ router.get("/survey", (req, res) => {
   res.render("survey.pug");
 });
 
-router.post("/survey", (req, res) => {
+router.post("/survey", async (req, res) => {
   try {
-    const { duty, company: name, tags } = req.body;
+    const { duty, company: compName, tags, startDate, endDate } = req.body;
+    const newTagsArr = [...tags];
+
+    // const internship = new Internship();
+    // const submission = internship.insert(
+    //   moment(startDate).toISOString(),
+    //   moment(endDate).toISOString(),
+    //   duty,
+    //   name,
+    //   "Jeffrey",
+    //   tags
+    // );
+
+    const { token } = req.cookies;
+
+    if (token == null) throw new Error("No token");
+
+    const { name: stuName } = decodeAccessToken(token);
+
+    const student = new Student();
+    const { id: stuId } = await student.insert(stuName);
+
     const company = new Company();
-    company.insert(name);
-    res.json(req.body);
+    const { id: compId } = await company.insert(compName);
+
+    res.json(req.cookies);
   } catch (err) {
     res.json(err);
   }

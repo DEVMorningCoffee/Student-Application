@@ -122,7 +122,6 @@ class Calendar {
     this.monthContainer.classList.add("month-and-year");
     this.monthContainer.innerHTML = `<h4>${this.getMonth()} ${this.getYear()}</h4>`;
     this.popupContainer.appendChild(this.monthContainer);
-    console.log("Buidling calendar");
 
     this.createButtons();
 
