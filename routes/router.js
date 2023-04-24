@@ -2,7 +2,13 @@ const express = require("express");
 const router = express.Router();
 const { generateAcessToken, decodeAccessToken } = require("../src/token/jwt");
 const moment = require("moment");
-const { Company, Student, Tag, Internship } = require("../src/db/queries");
+const {
+  Company,
+  Student,
+  Tag,
+  Internship,
+  InternshipTag,
+} = require("../src/db/queries");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -48,16 +54,6 @@ router.post("/survey", async (req, res) => {
     const { duty, company: compName, tags, startDate, endDate } = req.body;
     const newTagsArr = [...tags];
 
-    // const internship = new Internship();
-    // const submission = internship.insert(
-    //   moment(startDate).toISOString(),
-    //   moment(endDate).toISOString(),
-    //   duty,
-    //   name,
-    //   "Jeffrey",
-    //   tags
-    // );
-
     const { token } = req.cookies;
 
     if (token == null) throw new Error("No token");
@@ -70,8 +66,26 @@ router.post("/survey", async (req, res) => {
     const company = new Company();
     const { id: compId } = await company.insert(compName);
 
-    res.json(req.cookies);
+    const internship = new Internship();
+    const { id: internId } = await internship.insert(
+      moment(startDate).toISOString(),
+      moment(endDate).toISOString(),
+      duty,
+      stuId,
+      compId
+    );
+
+    const tag = new Tag();
+    const internshipTag = new InternshipTag();
+
+    for (const val of newTagsArr) {
+      const { id: tagId } = await tag.insert(val);
+      await internshipTag.insert(internId, tagId);
+    }
+
+    res.redirect("/");
   } catch (err) {
-    res.json(err);
+    res.flash("msg", err.message);
+    res.redirect("/login");
   }
 });
