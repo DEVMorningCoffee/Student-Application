@@ -1,34 +1,75 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-class Company {
-  async insert(name) {
-    try {
-      let company = await prisma.company.create({
-        data: {
-          name: name,
+class Internship {
+  async insert(
+    startDate,
+    endDate,
+    description,
+    compName,
+    stuName,
+    tags = null
+  ) {
+    return await prisma.internship.create({
+      data: {
+        startDate,
+        endDate,
+        description,
+        companyId: "ajaja",
+        studentId: "hahaha",
+        InternshipTag: {
+          createMany: {},
         },
-      });
-
-      return company;
-    } catch (error) {
-      throw error;
-    }
+      },
+    });
   }
 }
 
 class Student {
   async insert(name) {
-    try {
-      let user = await prisma.student.create({
-        data: { name },
-      });
+    let user = await prisma.student.upsert({
+      update: {},
+      where: { name },
+      create: {
+        name,
+      },
+    });
 
-      return user;
-    } catch (error) {
-      throw error;
-    }
+    return user;
   }
 }
 
-module.exports = { Company, Student };
+class Company {
+  async insert(name) {
+    let company = await prisma.company.upsert({
+      update: {},
+      where: { name },
+      create: {
+        name,
+      },
+    });
+    return company;
+  }
+}
+
+class Tag {
+  async insert(name) {
+    let tag = await prisma.tag.upsert({
+      update: {},
+      where: { name },
+      create: {
+        name,
+      },
+    });
+    return tag;
+  }
+
+  async find(name) {
+    let tag = await prisma.tag.findFirst({
+      where: { name },
+    });
+    return tag;
+  }
+}
+
+module.exports = { Company, Student, Tag, Internship };
