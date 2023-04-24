@@ -1,17 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Caudex&display=swap");
 
-* {
+*, html {
     box-sizing: border-box;
     font-weight: normal;
     font-family: "Caudex", serif;
 }
 
-body {
+body, html {
     color: #f3e5ab;
     background: #232526;
     background: -webkit-linear-gradient(to right, #414345, #232526);
     text-align: center;
 }
+
 
 .flip-container {
     width: 100%;
@@ -168,4 +169,29 @@ body {
 .standard-btn:hover {
     color: #FFFFFF;
     background-color: #00acec;
+}
+
+#survey-form {
+    display: flex;
+    flex-flow: column;
+    gap: 0.5em;
+  
+    width: min(40em, 70vw);
+    padding: 1.5em 2em;
+    border-radius: 1.5em;
+    margin: 0 auto;
+  
+    color: white;
+    background-color: var(--dark-purple);
+  }
+  
+  #survey-form > label {
+    padding-left: 0.5em;
+  
+    text-align: left;
+    font-size: 1.2em;
+  }
+
+.form_input{
+    display: none;
 }

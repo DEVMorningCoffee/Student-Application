@@ -16,12 +16,13 @@ html(lang="en")
         form(id='survey=-form', method="post", action="/survey")
             fieldset 
                 p.pform Please include your description of duty?
-                textarea#comments.input-textarea(name='duty' placeholder='Your answer', required)
+                textarea#comments.input-textarea(name='duty' placeholder='Your answer', required) 
+                    #{a.description}
                 fieldset
-                    div
+                    div 
                         label(for="company-list") Which company?
                         .sgroup
-                            input(id="company-list" list="company-data" type="search", required, name="company", placeholder="Company" autocomplete="off")
+                            input(id="company-list" list="company-data" type="search", required, name="company", placeholder="Company" autocomplete="off")&attributes({"value": a.compName})
                         datalist(id="company-data")
                             option(value="Facebook") 
                             option(value="Google") 
@@ -32,7 +33,7 @@ html(lang="en")
                     section.tags
                         p Input tags here (seperate with comma)
                         .tags__container
-                        input#search(type='text', list="tags-data", placeholder="Tags" autocomplete="off") 
+                        input#search(type='text', list="tags-data", placeholder="Tags" autocomplete="off")
                         datalist(id="tags-data")
                             option(value="HTML") 
                             option(value="CSS") 
@@ -42,14 +43,14 @@ html(lang="en")
                 fieldset.calendar
                     .form-container
                         div.form-container_calendar
-                            input.start_date_input.date_input(type='text' placeholder='Start date (YYYY-MM-DD)' name="startDate" required) 
+                            input.start_date_input.date_input(type='text' placeholder='Start date (YYYY-MM-DD)' name="startDate" required)&attributes({"value": a.startDate})
                     .form-container
                         div.form-container_calendar
-                            input.end_date_input.date_input(type='text' placeholder='End date (YYYY-MM-DD)' name="endDate" required) 
+                            input.end_date_input.date_input(type='text' placeholder='End date (YYYY-MM-DD)' name="endDate" required)&attributes({"value": a.endDate})
                 fieldset
                     button#submit.submit-button(type='submit') Submit
 
         footer
             label Made By Jeffrey A.
 
-        script(src='/js/survey.js', type='text/javascript' async)
+//- - document.querySelector("#comments").innerHTML = #{a.description};

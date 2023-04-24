@@ -32,6 +32,11 @@ class Internship {
       },
     });
   }
+  async findById(id) {
+    return await prisma.internship.findUnique({
+      where: { id },
+    });
+  }
 
   async findSurvey(studId) {
     return await prisma.internship.findMany({
@@ -42,6 +47,12 @@ class Internship {
   async findCompanySurvey(compId) {
     return await prisma.internship.findMany({
       where: { companyId: compId },
+    });
+  }
+
+  async findByStartDate(startDate) {
+    return await prisma.internship.findMany({
+      where: { startDate },
     });
   }
 }

@@ -95,9 +95,9 @@ router.post("/survey", async (req, res) => {
   }
 });
 
-router.get("/filter/company", async (req, res) => {
+router.post("/filter/company", async (req, res) => {
   try {
-    let filterName = req.query.name;
+    let filterName = req.body.name;
 
     const company = new Company();
     const { id } = await company.findCompanyByName(filterName);
@@ -107,6 +107,21 @@ router.get("/filter/company", async (req, res) => {
     const newResults = await formatResults(results);
 
     res.render("filter.pug", { newResults });
+  } catch (err) {
+    req.flash("msg", err.message);
+    res.redirect("/login");
+  }
+});
+
+router.get("/survey/edit", async (req, res) => {
+  try {
+    const { id } = req.query;
+
+    const internship = new Internship();
+    const results = await internship.findById(id);
+    const [a] = await formatResults([results]);
+
+    res.render("surveyEdit.pug", { a });
   } catch (err) {
     req.flash("msg", err.message);
     res.redirect("/login");

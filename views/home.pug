@@ -7,28 +7,34 @@ html(lang="en")
         link(rel="stylesheet", href="/css/home.css")
         title Home Page
     body 
-    .container
-        h1 Surveys
-        section
-            .flip-container
-                -for(var i = 0; i < newResults.length; i++){
-                        .flip
-                            .front(style='background-image: url(https://images.pexels.com/photos/955389/pexels-photo-955389.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)')
-                                h1.text-shadow #{newResults[i].compName}
-                            .back
-                                .date-container
-                                    .display-date
-                                        #{newResults[i].startDate}
-                                    span.seperator -
-                                    .display-date   
-                                        #{newResults[i].endDate}
-                                .tag
-                                    span HTML 
-                                    span CSS 
-                                    span C++
-                                .description 
-                                    p #{newResults[i].description}
-                -}
-        a.standard-btn.btn-lg(href='/survey') New Survey
-                
+        .container
+            h1 Surveys
+            section
+                .flip-container
+                    -for(var i = 0; i < newResults.length; i++){
+                            .flip
+                                .front(style='background-image: url(https://images.pexels.com/photos/955389/pexels-photo-955389.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)')
+                                    h1.text-shadow #{newResults[i].compName}
+                                .back
+                                    .date-container
+                                        .display-date
+                                            #{newResults[i].startDate}
+                                        span.seperator -
+                                        .display-date   
+                                            #{newResults[i].endDate}
+                                    .tag
+                                        span HTML 
+                                        span CSS 
+                                        span C++
+                                    .description 
+                                        p #{newResults[i].description}
+                                    form(action='/survey/edit', method="get")
+                                        input.form_input(type="text", name="id")&attributes({'value': newResults[i].internshipId})
+                                        button.standard-btn.btn-lg(type="submit") Edit
+                    -}
+            a.standard-btn.btn-lg(href='/survey') New Survey
+            form(action="/filter/company", method="post")#survey-form
+                label(for='inputName') Company:
+                input#inputName(type='text' name='name' placeholder='Filter Company' required='')
+                            
                     

@@ -60,9 +60,17 @@ app.get("/", async (req, res) => {
       const startDate = moment(results[i].startDate).utc().format("DD-MM-YYYY");
       const endDate = moment(results[i].endDate).utc().format("DD-MM-YYYY");
       const description = results[i].description;
-
-      newResults[i] = { stuName, compName, startDate, endDate, description };
+      const internshipId = results[i].id;
+      newResults[i] = {
+        stuName,
+        compName,
+        startDate,
+        endDate,
+        description,
+        internshipId,
+      };
     }
+    console.log(newResults);
 
     res.render("home.pug", { newResults });
   } catch (error) {
