@@ -8,6 +8,7 @@ const {
   Tag,
   Internship,
   InternshipTag,
+  formatResults,
 } = require("../src/db/queries");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
@@ -90,6 +91,24 @@ router.post("/survey", async (req, res) => {
     res.redirect("/");
   } catch (err) {
     res.flash("msg", err.message);
+    res.redirect("/login");
+  }
+});
+
+router.get("/filter/company", async (req, res) => {
+  try {
+    let filterName = req.query.name;
+
+    const company = new Company();
+    const { id } = await company.findCompanyByName(filterName);
+    const internship = new Internship();
+    const results = await internship.findCompanySurvey(id);
+
+    const newResults = await formatResults(results);
+
+    res.render("filter.pug", { newResults });
+  } catch (err) {
+    req.flash("msg", err.message);
     res.redirect("/login");
   }
 });

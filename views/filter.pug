@@ -1,0 +1,29 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", href="/css/home.css")
+        title Filter Page
+    body 
+    .container
+        h1 Surveys
+        section
+            .flip-container
+                -for(var i = 0; i < newResults.length; i++){
+                        .flip
+                            .front(style='background-image: url(https://images.pexels.com/photos/955389/pexels-photo-955389.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)')
+                                h1.text-shadow #{newResults[i].compName}
+                            .back
+                                .date-container
+                                    .display-date
+                                        #{newResults[i].startDate}
+                                    span.seperator -
+                                    .display-date   
+                                        #{newResults[i].endDate}
+                                .description 
+                                    p #{newResults[i].description}
+                -}
+                
+                    

@@ -1,5 +1,24 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const moment = require("moment");
+
+async function formatResults(results) {
+  const company = new Company();
+  const student = new Student();
+  let newResults = [];
+  for (let i = 0; i < results.length; i++) {
+    const { name: compName } = await company.findCompany(results[i].companyId);
+    const { name: stuName } = await student.findById(results[i].studentId);
+
+    const startDate = moment(results[i].startDate).utc().format("DD-MM-YYYY");
+    const endDate = moment(results[i].endDate).utc().format("DD-MM-YYYY");
+    const description = results[i].description;
+
+    newResults[i] = { stuName, compName, startDate, endDate, description };
+  }
+
+  return newResults;
+}
 
 class Internship {
   async insert(startDate, endDate, description, stuId, compId) {
@@ -17,6 +36,12 @@ class Internship {
   async findSurvey(studId) {
     return await prisma.internship.findMany({
       where: { studentId: studId },
+    });
+  }
+
+  async findCompanySurvey(compId) {
+    return await prisma.internship.findMany({
+      where: { companyId: compId },
     });
   }
 }
@@ -39,6 +64,12 @@ class Student {
       where: { name },
     });
   }
+
+  async findById(id) {
+    return await prisma.student.findUnique({
+      where: { id },
+    });
+  }
 }
 
 class Company {
@@ -55,6 +86,11 @@ class Company {
   async findCompany(id) {
     return await prisma.company.findUnique({
       where: { id },
+    });
+  }
+  async findCompanyByName(name) {
+    return await prisma.company.findUnique({
+      where: { name },
     });
   }
 }
@@ -103,4 +139,11 @@ class InternshipTag {
   }
 }
 
-module.exports = { Company, Student, Tag, Internship, InternshipTag };
+module.exports = {
+  Company,
+  Student,
+  Tag,
+  Internship,
+  InternshipTag,
+  formatResults,
+};
