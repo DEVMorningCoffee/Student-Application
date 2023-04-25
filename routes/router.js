@@ -36,7 +36,7 @@ router.post("/login", async (req, res) => {
       throw new Error("Please enter a name");
     }
 
-    student.insert(name);
+    await student.insert(name);
 
     // JWT
     const token = generateAcessToken(name);

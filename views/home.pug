@@ -33,6 +33,7 @@ html(lang="en")
                                         button.standard-btn.btn-lg(type="submit") Edit
                     -}
             a.standard-btn.btn-lg(href='/survey') New Survey
+            h1 Filter Options
             form(action="/filter/company", method="post")#survey-form
                 label(for='inputName') Company:
                 input#inputName(type='text' name='name' placeholder='Filter Company' required='')
